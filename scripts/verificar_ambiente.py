@@ -57,13 +57,18 @@ def verificar_env() -> str:
     from dotenv import load_dotenv
 
     load_dotenv(arquivo)
-    chave = os.getenv("OPENAI_API_KEY", "").strip()
+    bruta = os.getenv("OPENAI_API_KEY", "")
+    chave = bruta.strip()
     if not chave:
-        raise RuntimeError("OPENAI_API_KEY vazia no .env")
+        raise RuntimeError("OPENAI_API_KEY vazia; confira se GEMINI_API_KEY existe no Windows")
     if chave == "sua-chave-aqui":
-        raise RuntimeError("troque 'sua-chave-aqui' pela chave entregue pelo professor")
-    if chave != chave.strip():
+        raise RuntimeError("troque 'sua-chave-aqui' pela chave do projeto")
+    if bruta != chave:
         raise RuntimeError("a chave tem espacos sobrando")
+
+    base = os.getenv("OPENAI_BASE_URL", "").strip()
+    if "generativelanguage.googleapis.com" in base:
+        return "chave configurada (Gemini pelo endpoint da OpenAI)"
     return "chave configurada"
 
 

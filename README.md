@@ -8,7 +8,7 @@ entrar em `aulas/` conforme o professor liberar.
 
 - `.venv` com Python 3.14.3
 - `requirements.txt` com as bibliotecas do curso
-- `.env` e `.env.example`
+- `.env` já com a chave e `.env.example` com o modelo
 - `scripts/verificar_ambiente.py`, que confere se está tudo instalado
 - `aulas/` e `dados/` ainda vazias
 
@@ -28,6 +28,24 @@ Se aparecer "Ambiente OK", está pronto. Para sair do ambiente virtual:
 deactivate
 ```
 
+## Chave da API
+
+A chave é a mesma do projeto Observa Cidade. Ela é do Gemini e fica na variável
+`GEMINI_API_KEY` do Windows, então o `.env` só aponta para ela:
+
+```
+OPENAI_API_KEY=${GEMINI_API_KEY}
+OPENAI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai/
+OPENAI_MODEL=gemini-3.5-flash-lite
+```
+
+O SDK da OpenAI fala com o Gemini por esse endereço compatível. Testei uma chamada
+de chat com o `openai` do venv e respondeu normal.
+
+Se o professor entregar uma chave da OpenAI de verdade (`sk-...`), troque a linha
+`OPENAI_API_KEY` pela chave e apague a `OPENAI_BASE_URL`. Também vale conferir o
+nome do modelo nos exemplos, porque o curso pode usar `gpt-4o-mini` ou outro.
+
 ## Coisas que deram problema aqui
 
 O PowerShell bloqueou a ativação do venv na primeira vez. Resolvi rodando uma vez:
@@ -45,8 +63,6 @@ Windows.
 
 ## O que falta
 
-- Colocar a chave da OpenAI no `.env`, no lugar de `sua-chave-aqui` (o professor
-  ainda vai passar).
 - Copiar os arquivos das aulas para `aulas/`.
 
 O `.env` está no `.gitignore`, então a chave não vai junto para o repositório.
