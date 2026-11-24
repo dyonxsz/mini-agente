@@ -9,6 +9,7 @@ entrar em `aulas/` conforme o professor liberar.
 - `.venv` com Python 3.14.3
 - `requirements.txt` com as bibliotecas do curso
 - `.env` já com a chave e `.env.example` com o modelo
+- `agente.py`, um chat de exemplo que usa ferramentas
 - `scripts/verificar_ambiente.py`, que confere se está tudo instalado
 - `aulas/` e `dados/` ainda vazias
 
@@ -27,6 +28,27 @@ Se aparecer "Ambiente OK", está pronto. Para sair do ambiente virtual:
 ```powershell
 deactivate
 ```
+
+## Agente de exemplo
+
+`agente.py` é um chat de terminal com duas ferramentas (soma e data/hora). Serve
+para confirmar que a chave e o function calling estão funcionando.
+
+```powershell
+.venv\Scripts\Activate.ps1
+python agente.py
+```
+
+Exemplo:
+
+```
+Voce: Quanto e 37 + 58?
+  [ferramenta] somar({'b': 58, 'a': 37}) -> 95
+Agente: 37 + 58 = 95.
+```
+
+Digite `sair` para encerrar. Os exercícios de cada aula vão para `aulas/`, sem
+misturar com esse exemplo.
 
 ## Chave da API
 
