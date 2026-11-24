@@ -39,13 +39,15 @@ python aulas\01_personagens_e_regras.py
 python aulas\02_memoria.py
 python aulas\03_criar_banco_vetorial.py
 python aulas\projeto_final_faq_rag\03_chatbot_rag.py
+python aulas\projeto_final_faq_rag\03_agente_uma_ferramenta.py
 python aulas\projeto_final_faq_rag\04_agente_multiplas_ferramentas.py
 ```
 
-O `03_criar_banco_vetorial.py` precisa rodar antes dos dois últimos, porque é ele
+O `03_criar_banco_vetorial.py` precisa rodar antes dos três últimos, porque é ele
 que lê o PDF e monta o banco em `dados/banco_vetorial_faq`. Na primeira vez o
 ChromaDB baixa o modelo de embedding (~80 MB).
 
+O `03_agente_uma_ferramenta.py` é a versão intermediária, com só a busca no FAQ.
 O `04` é o agente com três ferramentas: buscar no FAQ, calcular desconto no PIX e
 abrir chamado de suporte. O chamado fica em `dados/chamados_suporte.csv`.
 
