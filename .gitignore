@@ -3,3 +3,5 @@
 __pycache__/
 *.pyc
 dados/*.db
+dados/banco_vetorial_faq/
+dados/chamados_suporte.csv

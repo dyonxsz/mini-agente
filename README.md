@@ -1,17 +1,18 @@
 # Mini-agente do curso
 
 Anotações do ambiente que montei para as aulas de "Construindo um Mini-Agente com IA".
-Por enquanto só existe a base para rodar os exemplos. Os arquivos de cada aula vão
-entrar em `aulas/` conforme o professor liberar.
+Os exemplos que o professor passou estão em `aulas/`, junto com um FAQ de exemplo
+em `dados/faq_projeto_exemplo.pdf`.
 
 ## O que tem na pasta
 
 - `.venv` com Python 3.14.3
 - `requirements.txt` com as bibliotecas do curso
 - `.env` já com a chave e `.env.example` com o modelo
-- `agente.py`, um chat de exemplo que usa ferramentas
+- `agente.py`, um chat de exemplo com duas ferramentas
+- `aulas/` com os scripts das aulas e do projeto final
+- `dados/` com o PDF do FAQ e o banco vetorial gerado
 - `scripts/verificar_ambiente.py`, que confere se está tudo instalado
-- `aulas/` e `dados/` ainda vazias
 
 ## Para rodar
 
@@ -28,6 +29,25 @@ Se aparecer "Ambiente OK", está pronto. Para sair do ambiente virtual:
 ```powershell
 deactivate
 ```
+
+## Aulas
+
+A ordem que usei para testar:
+
+```powershell
+python aulas\01_personagens_e_regras.py
+python aulas\02_memoria.py
+python aulas\03_criar_banco_vetorial.py
+python aulas\projeto_final_faq_rag\03_chatbot_rag.py
+python aulas\projeto_final_faq_rag\04_agente_multiplas_ferramentas.py
+```
+
+O `03_criar_banco_vetorial.py` precisa rodar antes dos dois últimos, porque é ele
+que lê o PDF e monta o banco em `dados/banco_vetorial_faq`. Na primeira vez o
+ChromaDB baixa o modelo de embedding (~80 MB).
+
+O `04` é o agente com três ferramentas: buscar no FAQ, calcular desconto no PIX e
+abrir chamado de suporte. O chamado fica em `dados/chamados_suporte.csv`.
 
 ## Agente de exemplo
 
@@ -47,8 +67,7 @@ Voce: Quanto e 37 + 58?
 Agente: 37 + 58 = 95.
 ```
 
-Digite `sair` para encerrar. Os exercícios de cada aula vão para `aulas/`, sem
-misturar com esse exemplo.
+Digite `sair` para encerrar.
 
 ## Chave da API
 
@@ -59,10 +78,11 @@ A chave é a mesma do projeto Observa Cidade. Ela é do Gemini e fica na variáv
 OPENAI_API_KEY=${GEMINI_API_KEY}
 OPENAI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai/
 OPENAI_MODEL=gemini-3.5-flash-lite
+OPENAI_CHAT_MODEL=gemini-3.5-flash-lite
 ```
 
-O SDK da OpenAI fala com o Gemini por esse endereço compatível. Testei uma chamada
-de chat com o `openai` do venv e respondeu normal.
+O SDK da OpenAI fala com o Gemini por esse endereço compatível. Testei as aulas e
+o agente com essa configuração.
 
 Se o professor entregar uma chave da OpenAI de verdade (`sk-...`), troque a linha
 `OPENAI_API_KEY` pela chave e apague a `OPENAI_BASE_URL`. Também vale conferir o
@@ -83,8 +103,5 @@ porque a pasta `.venv\Scripts` passa na frente. Se quiser arrumar de vez, dá pa
 desligar os aliases `python.exe` e `python3.exe` nas configurações de aplicativos do
 Windows.
 
-## O que falta
-
-- Copiar os arquivos das aulas para `aulas/`.
-
-O `.env` está no `.gitignore`, então a chave não vai junto para o repositório.
+O `.env` e o banco vetorial estão no `.gitignore`. Se o professor mandar mais
+arquivos, é só copiar para `aulas/`.
