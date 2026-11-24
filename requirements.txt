@@ -25,3 +25,4 @@ sqlalchemy>=2.0        # conecta em SQLite / MySQL / PostgreSQL pelo mesmo códi
 
 # --- Aula 5: RAG em PDF ---
 pypdf>=4.0             # extrai o texto de arquivos PDF
+reportlab>=4.0         # gera o PDF do FAQ do projeto (scripts/gerar_faq_pdf.py)

@@ -1,4 +1,4 @@
-"""Projeto final: chatbot com RAG no FAQ.
+"""Projeto final: chatbot com RAG no FAQ do Observa Cidade.
 
 Busca os trechos mais parecidos no banco vetorial e manda junto com a pergunta
 para o modelo responder usando só o conteúdo do FAQ.
@@ -43,15 +43,15 @@ except Exception:
     )
 
 regras = (
-    "Você é um assistente virtual prestativo da empresa. "
+    "Você é o assistente virtual do Observa Cidade. "
     "Responda às dúvidas usando APENAS as informações do FAQ fornecido. "
-    "Se a resposta não estiver no FAQ, diga educadamente que não possui essa informação "
-    "e recomende falar com o suporte humano."
+    "Se a resposta não estiver no FAQ, diga educadamente que não encontrou essa informação "
+    "e recomende abrir um chamado em Ajuda e Suporte."
 )
 
 historico = [{"role": "system", "content": regras}]
 print("=" * 60)
-print("Chatbot RAG iniciado! Digite sua pergunta ou 'sair' para encerrar.")
+print("Chatbot RAG do Observa Cidade iniciado! Digite sua pergunta ou 'sair' para encerrar.")
 print("=" * 60)
 
 while True:

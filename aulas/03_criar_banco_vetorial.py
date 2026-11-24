@@ -1,7 +1,7 @@
 """Aula 3: PDF -> chunks -> banco vetorial no ChromaDB.
 
-Lê o FAQ de exemplo, corta o texto em pedaços com overlap e salva os vetores
-em dados/banco_vetorial_faq. No fim, faz uma busca semântica de teste.
+Lê o FAQ do Observa Cidade, corta o texto em pedaços com overlap e salva os
+vetores em dados/banco_vetorial_faq. No fim, faz uma busca semântica de teste.
 
 Rode com:
     python aulas/03_criar_banco_vetorial.py
@@ -19,7 +19,7 @@ except Exception:
     pass
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-caminho_pdf = os.path.join(RAIZ, "dados", "faq_projeto_exemplo.pdf")
+caminho_pdf = os.path.join(RAIZ, "dados", "faq_observa_cidade.pdf")
 caminho_banco = os.path.join(RAIZ, "dados", "banco_vetorial_faq")
 
 if not os.path.exists(caminho_pdf):
@@ -44,6 +44,12 @@ while inicio < len(texto):
 # 3. BANCO VETORIAL (CHROMADB COM EMBEDDING NATIVO)
 cliente_chroma = chromadb.PersistentClient(path=caminho_banco)
 
+# Apaga a coleção antiga para não misturar com um FAQ anterior.
+try:
+    cliente_chroma.delete_collection("faq_colecao")
+except Exception:
+    pass
+
 # get_or_create_collection usa o embedding nativo do ChromaDB por padrão.
 # Na primeira vez ele baixa o modelo all-MiniLM-L6-v2 (~80 MB).
 colecao = cliente_chroma.get_or_create_collection(
@@ -56,10 +62,10 @@ colecao.upsert(ids=ids, documents=chunks)
 print(f"{len(chunks)} chunks salvos com sucesso!")
 
 # 4. TESTE DE BUSCA SEMÂNTICA
-pergunta = "Qual é a política de garantia e devolução?"
-resultado = colecao.query(query_texts=[pergunta], n_results=1)
+pergunta = "Como registro uma ocorrência com foto?"
+resultado = colecao.query(query_texts=[pergunta], n_results=2)
 
 print("\n--- Teste de Busca ---")
 print("Pergunta:", pergunta)
-print("Trecho mais relevante encontrado:")
-print(resultado["documents"][0][0].strip())
+for i, trecho in enumerate(resultado["documents"][0], 1):
+    print(f"\n[{i}] {trecho.strip()}")

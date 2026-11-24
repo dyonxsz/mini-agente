@@ -1,8 +1,8 @@
 """Projeto final - Script 04: agente com múltiplas ferramentas.
 
 O agente tem 3 ferramentas e precisa escolher a certa:
-- buscar_no_faq: lê o FAQ (banco vetorial).
-- calcular_desconto_pix: faz a conta exata em Python.
+- buscar_no_faq: lê o FAQ do Observa Cidade (banco vetorial).
+- calcular_prioridade: aplica a regra de triagem em Python.
 - abrir_chamado_suporte: grava um chamado em CSV.
 
 Antes de rodar, crie o banco:
@@ -57,14 +57,23 @@ def buscar_no_faq(termo_busca):
     return "\n---\n".join(resultado["documents"][0])
 
 
-# 3. FERRAMENTA 2: CALCULAR (conta exata, feita em Python, não pelo LLM)
-def calcular_desconto_pix(valor, tipo):
-    # Regra de negócio real da loja: 10% em produtos, 5% em serviços
-    percentual = 0.10 if tipo == "produto" else 0.05
-    valor_com_desconto = valor * (1 - percentual)
+# 3. FERRAMENTA 2: CALCULAR (regra de triagem exata, feita em Python, não pelo LLM)
+def calcular_prioridade(categoria, risco):
+    categoria = (categoria or "").strip().lower()
+    risco = (risco or "").strip().lower()
+
+    prioridade = {"baixo": "baixa", "medio": "média", "alto": "alta"}.get(
+        risco, "média"
+    )
+
+    criticas = {"alagamento", "buraco", "iluminacao", "deslizamento"}
+    if risco == "alto" and categoria in criticas:
+        prioridade = "crítica"
+
     return (
-        f"Valor original: R$ {valor:.2f} | Desconto PIX: {percentual:.0%} "
-        f"| Valor final: R$ {valor_com_desconto:.2f}"
+        f"Categoria: {categoria or 'não informada'} | "
+        f"Risco: {risco or 'não informado'} | "
+        f"Prioridade sugerida: {prioridade}"
     )
 
 
@@ -91,7 +100,7 @@ ferramentas = [
         "type": "function",
         "function": {
             "name": "buscar_no_faq",
-            "description": "Busca informações oficiais no FAQ da empresa sobre produtos, preços, regras e suporte.",
+            "description": "Busca informações oficiais no FAQ do Observa Cidade sobre o aplicativo, ocorrências, conta, privacidade e suporte.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -104,26 +113,26 @@ ferramentas = [
             },
         },
     },
-    # Ferramenta de CÁLCULO: faz a conta exata do desconto no PIX
+    # Ferramenta de CÁLCULO: aplica a regra de triagem da prefeitura
     {
         "type": "function",
         "function": {
-            "name": "calcular_desconto_pix",
-            "description": "Calcula o valor final de uma compra com o desconto do PIX já aplicado.",
+            "name": "calcular_prioridade",
+            "description": "Classifica a prioridade de uma ocorrência a partir da categoria e do risco informado pelo cidadão.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "valor": {
-                        "type": "number",
-                        "description": "Valor original em reais, sem desconto",
-                    },
-                    "tipo": {
+                    "categoria": {
                         "type": "string",
-                        "enum": ["produto", "servico"],
-                        "description": "Se é um produto ou um serviço",
+                        "description": "Categoria da ocorrência, como buraco, iluminacao, lixo ou alagamento",
+                    },
+                    "risco": {
+                        "type": "string",
+                        "enum": ["baixo", "medio", "alto"],
+                        "description": "Risco informado pelo cidadão",
                     },
                 },
-                "required": ["valor", "tipo"],
+                "required": ["categoria", "risco"],
             },
         },
     },
@@ -132,8 +141,8 @@ ferramentas = [
         "type": "function",
         "function": {
             "name": "abrir_chamado_suporte",
-            "description": "Abre um chamado de suporte humano quando o cliente pede explicitamente para falar com o suporte "
-            "ou quando o FAQ não tem a resposta para o problema dele.",
+            "description": "Abre um chamado de suporte no aplicativo quando o cidadão pede explicitamente para falar com o suporte "
+            "ou quando o FAQ não tem a resposta para o problema.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -155,7 +164,7 @@ ferramentas = [
 # Dicionário liga o nome da ferramenta à função Python que realmente executa
 funcoes_disponiveis = {
     "buscar_no_faq": buscar_no_faq,
-    "calcular_desconto_pix": calcular_desconto_pix,
+    "calcular_prioridade": calcular_prioridade,
     "abrir_chamado_suporte": abrir_chamado_suporte,
 }
 
@@ -163,11 +172,11 @@ historico = [
     {
         "role": "system",
         "content": (
-            "Você é o assistente virtual da empresa e tem 3 ferramentas. "
-            "Use buscar_no_faq para dúvidas sobre regras, preços ou produtos. "
-            "Use calcular_desconto_pix quando o cliente pedir o valor final de uma compra no PIX. "
-            "Use abrir_chamado_suporte só quando o cliente pedir para falar com o suporte "
-            "ou quando o FAQ não resolver o problema dele. "
+            "Você é o assistente virtual do Observa Cidade e tem 3 ferramentas. "
+            "Use buscar_no_faq para dúvidas sobre o aplicativo, ocorrências, conta, privacidade ou suporte. "
+            "Use calcular_prioridade quando o cidadão informar a categoria e o risco de uma ocorrência. "
+            "Use abrir_chamado_suporte só quando o cidadão pedir para falar com o suporte "
+            "ou quando o FAQ não resolver o problema. "
             "Para cumprimentos ou perguntas gerais, responda diretamente sem usar ferramentas."
         ),
     }

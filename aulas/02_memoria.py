@@ -9,9 +9,10 @@ Rode com:
 
 import os
 import sys
+import time
 
 from dotenv import load_dotenv
-from openai import OpenAI
+from openai import OpenAI, RateLimitError
 
 try:
     sys.stdout.reconfigure(encoding="utf-8")
@@ -28,12 +29,21 @@ cliente = OpenAI(
 modelo = os.getenv("OPENAI_CHAT_MODEL", "gemini-3.5-flash-lite")
 
 
-def perguntar(mensagens: list[dict]) -> str:
-    resposta = cliente.chat.completions.create(
-        model=modelo,
-        messages=mensagens,
-    )
-    return resposta.choices[0].message.content
+def perguntar(mensagens: list[dict], max_tokens: int = 300) -> str:
+    for tentativa in range(4):
+        try:
+            resposta = cliente.chat.completions.create(
+                model=modelo,
+                messages=mensagens,
+                max_tokens=max_tokens,
+            )
+            return resposta.choices[0].message.content
+        except RateLimitError:
+            if tentativa == 3:
+                raise
+            espera = 15 * (tentativa + 1)
+            print(f"Limite de requisições atingido; esperando {espera}s...")
+            time.sleep(espera)
 
 
 print("=" * 60)
@@ -42,8 +52,8 @@ print("=" * 60)
 
 apresentacao = (
     "Oi! Meu nome é Ana\n"
-    "e meu projeto é um sistema\n"
-    "de estoque de uma farmácia."
+    "e meu projeto é o Observa Cidade,\n"
+    "um aplicativo para registrar ocorrências urbanas."
 )
 resposta_1 = perguntar([{"role": "user", "content": apresentacao}])
 print("USER     :", apresentacao)
@@ -54,7 +64,7 @@ print("=" * 60)
 print("CHAMADA 2 - sem memória (só a pergunta nova)")
 print("=" * 60)
 
-pergunta = "Qual é o meu nome e o que eu faço?"
+pergunta = "Qual é o meu nome e qual é o meu projeto?"
 resposta_2 = perguntar([{"role": "user", "content": pergunta}])
 print("USER     :", pergunta)
 print("ASSISTANT:", resposta_2)

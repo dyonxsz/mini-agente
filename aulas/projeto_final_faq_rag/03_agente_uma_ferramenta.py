@@ -54,7 +54,7 @@ ferramentas = [
         "type": "function",
         "function": {
             "name": "buscar_no_faq",
-            "description": "Busca informações oficiais no FAQ da empresa sobre produtos, preços, regras e suporte.",
+            "description": "Busca informações oficiais no FAQ do Observa Cidade sobre o aplicativo, ocorrências, conta, privacidade e suporte.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -73,10 +73,10 @@ historico = [
     {
         "role": "system",
         "content": (
-            "Você é o assistente virtual da empresa e tem uma ferramenta: buscar_no_faq. "
-            "Use a ferramenta para dúvidas sobre produtos, preços, regras e suporte. "
-            "Se a ferramenta não trouxer a resposta, diga que não possui essa informação "
-            "e recomende falar com o suporte humano. "
+            "Você é o assistente virtual do Observa Cidade e tem uma ferramenta: buscar_no_faq. "
+            "Use a ferramenta para dúvidas sobre o aplicativo, ocorrências, conta, privacidade e suporte. "
+            "Se a ferramenta não trouxer a resposta, diga que não encontrou essa informação "
+            "e recomende abrir um chamado em Ajuda e Suporte. "
             "Para cumprimentos, responda diretamente sem usar a ferramenta."
         ),
     }

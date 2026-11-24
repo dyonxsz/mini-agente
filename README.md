@@ -1,8 +1,8 @@
 # Mini-agente do curso
 
 Anotações do ambiente que montei para as aulas de "Construindo um Mini-Agente com IA".
-Os exemplos que o professor passou estão em `aulas/`, junto com um FAQ de exemplo
-em `dados/faq_projeto_exemplo.pdf`.
+Os exemplos que o professor passou estão em `aulas/`, usando o FAQ do projeto
+Observa Cidade em `dados/faq_observa_cidade.pdf`.
 
 ## O que tem na pasta
 
@@ -11,8 +11,9 @@ em `dados/faq_projeto_exemplo.pdf`.
 - `.env` já com a chave e `.env.example` com o modelo
 - `agente.py`, um chat de exemplo com duas ferramentas
 - `aulas/` com os scripts das aulas e do projeto final
-- `dados/` com o PDF do FAQ e o banco vetorial gerado
+- `dados/` com o FAQ do Observa Cidade e o banco vetorial gerado
 - `scripts/verificar_ambiente.py`, que confere se está tudo instalado
+- `scripts/gerar_faq_pdf.py`, que gera o FAQ em Markdown e PDF
 
 ## Para rodar
 
@@ -44,12 +45,25 @@ python aulas\projeto_final_faq_rag\04_agente_multiplas_ferramentas.py
 ```
 
 O `03_criar_banco_vetorial.py` precisa rodar antes dos três últimos, porque é ele
-que lê o PDF e monta o banco em `dados/banco_vetorial_faq`. Na primeira vez o
-ChromaDB baixa o modelo de embedding (~80 MB).
+que lê o PDF do FAQ do Observa Cidade e monta o banco em `dados/banco_vetorial_faq`.
+Na primeira vez o ChromaDB baixa o modelo de embedding (~80 MB).
 
 O `03_agente_uma_ferramenta.py` é a versão intermediária, com só a busca no FAQ.
-O `04` é o agente com três ferramentas: buscar no FAQ, calcular desconto no PIX e
-abrir chamado de suporte. O chamado fica em `dados/chamados_suporte.csv`.
+O `04` é o agente com três ferramentas: buscar no FAQ do Observa Cidade, calcular
+a prioridade de uma ocorrência e abrir chamado de suporte. O chamado fica em
+`dados/chamados_suporte.csv`.
+
+O FAQ é o mesmo do assistente do projeto Observa Cidade, com 20 perguntas. Se
+quiser mudar alguma resposta, edite a lista em `scripts/gerar_faq_pdf.py` e rode
+de novo:
+
+```powershell
+python scripts\gerar_faq_pdf.py
+python aulas\03_criar_banco_vetorial.py
+```
+
+O primeiro comando gera `dados/faq_observa_cidade.md` e o PDF; o segundo refaz o
+banco vetorial com o conteúdo novo.
 
 ## Agente de exemplo
 
